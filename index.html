@@ -227,7 +227,7 @@
       <div>
         <h2 class="text-3xl font-bold">Teklif & İletişim</h2>
         <p class="mt-2 text-gray-600">Formu doldurun; fiyat listesi ve numune için sizi arayalım.</p>
-        <form class="mt-6 space-y-4" onsubmit="event.preventDefault(); var d=new FormData(this); var msg='Merhaba,%0A%0Aİşletme: '+d.get('biz')+'%0AYetkili: '+d.get('yetkili')+'%0ATel: '+d.get('tel')+'%0AE-posta: '+d.get('mail')+'%0AŞehir: '+d.get('sehir')+'%0Aİhtiyaç: '+d.get('ihtiyac'); window.location.href='mailto:satis@anadolulavas.com?subject=Site%20Form&body='+msg;">
+        <form class="mt-6 space-y-4" onsubmit="event.preventDefault(); var d=new FormData(this); var msg='Merhaba,%0A%0Aİşletme: '+d.get('biz')+'%0AYetkili: '+d.get('yetkili')+'%0ATel: '+d.get('tel')+'%0AE-posta: '+d.get('mail')+'%0AŞehir: '+d.get('sehir')+'%0Aİhtiyaç: '+d.get('ihtiyac'); window.location.href='mailto:arda.aslan@htlavas.com?subject=Site%20Form&body='+msg;">
           <div class="grid grid-cols-2 gap-3">
             <input name="biz" class="rounded-2xl border px-3 py-3" placeholder="İşletme Adı" required>
             <input name="yetkili" class="rounded-2xl border px-3 py-3" placeholder="Yetkili Adı" required>
@@ -249,7 +249,7 @@
         <div class="font-semibold">HT Lavaş</div>
         <div class="mt-2 text-sm text-gray-700">
           <p>Adres: Harmandere, Ankara Cd. No:516, 34912 Pendik/İstanbul</p>
-          <p>E-posta: <a class="hover:underline" href="mailto:satis@anadolulavas.com">satis@anadolulavas.com</a></p>
+          <p>E-posta: <a class="hover:underline" href="mailto:arda.aslan@htlavas.com">arda.aslan@htlavas.com</a></p>
           <p>WhatsApp: <a class="hover:underline" href="https://wa.me/905511304536">+905511304536</a></p>
         </div>
       </div>
@@ -276,70 +276,5 @@
       });
     });
   </script>
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  const iletisim = document.querySelector('#iletisim');
-  const form = iletisim ? iletisim.querySelector('form') : document.querySelector('form');
-  if (!form) return;
-  form.id = form.id || 'contact-form';
-
-  const inputs = form.querySelectorAll('input, textarea');
-  inputs.forEach(function(el){
-    const ph = (el.getAttribute('placeholder') || '').toLowerCase();
-    const type = (el.getAttribute('type') || '').toLowerCase();
-    if (!el.name) {
-      if (ph.includes('ad') || ph.includes('isim') || ph.includes('name')) el.name = 'ad';
-      else if (type === 'email' || ph.includes('mail') || ph.includes('e-posta') || ph.includes('e posta')) el.name = 'email';
-      else if (type === 'tel' || type === 'phone' || ph.includes('telefon') || ph.includes('tel')) el.name = 'telefon';
-      else if (el.tagName.toLowerCase() === 'textarea' || ph.includes('mesaj') || ph.includes('message')) el.name = 'mesaj';
-    }
-  });
-
-  let status = form.querySelector('.form-status');
-  if (!status) {
-    status = document.createElement('div');
-    status.className = 'form-status';
-    status.style.marginTop = '8px';
-    status.style.fontSize = '14px';
-    form.appendChild(status);
-  }
-
-  form.addEventListener('submit', async function (e) {
-    e.preventDefault();
-    status.textContent = 'Gönderiliyor...';
-    status.style.color = '#374151';
-
-    const fd = new FormData(form);
-    const payload = {
-      ad: fd.get('ad') || '',
-      email: fd.get('email') || '',
-      telefon: fd.get('telefon') || '',
-      mesaj: fd.get('mesaj') || ''
-    };
-
-    try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify(payload)
-      });
-      const data = await res.json().catch(()=>({}));
-      if (res.ok) {
-        status.textContent = data.message || 'Teşekkürler! Mesajınız alındı.';
-        status.style.color = '#047857';
-        form.reset();
-      } else {
-        status.textContent = (data.error || 'E-posta gönderilemedi. Lütfen daha sonra tekrar deneyin.');
-        status.style.color = '#b91c1c';
-      }
-    } catch (err) {
-      status.textContent = 'Sunucuya ulaşılamadı. Lütfen daha sonra tekrar deneyin.';
-      status.style.color = '#b91c1c';
-    }
-  });
-});
-</script>
-
 </body>
 </html>
